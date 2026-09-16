@@ -3,16 +3,16 @@ framework:
     secret: '%env(APP_SECRET)%'
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    session:
+        cookie_secure: auto
+        cookie_samesite: lax
+
+    # Railway / reverse proxies — always honor X-Forwarded-* (not only in prod).
+    trusted_proxies: '%env(default:trust_all_proxies:TRUSTED_PROXIES)%'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-host']
 
     #esi: true
     #fragments: true
-
-when@prod:
-    framework:
-        # Railway (et reverse proxies) : accepter X-Forwarded-*
-        trusted_proxies: '%env(default:trust_all_proxies:TRUSTED_PROXIES)%'
-        trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-host']
 
 when@test:
     framework:
