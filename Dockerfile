@@ -2,8 +2,9 @@ FROM php:8.4-apache-bookworm
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        git unzip libzip-dev libicu-dev libpng-dev \
-    && docker-php-ext-install -j$(nproc) pdo_mysql intl opcache zip \
+        git unzip libzip-dev libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) pdo_mysql intl opcache zip gd \
     && a2dismod -f mpm_event mpm_worker \
     && a2enmod mpm_prefork \
     && a2enmod rewrite headers \

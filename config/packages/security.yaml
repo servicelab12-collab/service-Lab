@@ -38,6 +38,7 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/reset-password, roles: PUBLIC_ACCESS }
         - { path: ^/partner, roles: PUBLIC_ACCESS }
+        - { path: ^/qr, roles: PUBLIC_ACCESS }
         - { path: ^/contact, roles: PUBLIC_ACCESS }
         - { path: ^/a-propos, roles: PUBLIC_ACCESS }
         - { path: ^/demande, roles: PUBLIC_ACCESS }

@@ -1,0 +1,38 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}QR Code TZANET — ServiceLab{% endblock %}
+
+{% block body %}
+<section class="qr-page">
+    <div class="qr-card" data-controller="reveal">
+        <p class="eyebrow" data-reveal>Partenaire TZANET</p>
+        <h1 data-reveal>Scannez pour l’offre ServiceLab</h1>
+        <p class="qr-card__lead" data-reveal>
+            Ce QR code ouvre directement le formulaire partenaire TZANET sur mobile.
+        </p>
+
+        <figure class="qr-card__figure" data-reveal="scale" data-reveal-delay="80">
+            <img
+                src="{{ path('qr_tzanet_image') }}"
+                alt="QR code vers l’offre TZANET ServiceLab"
+                width="480"
+                height="480"
+                loading="eager"
+            >
+        </figure>
+
+        <p class="qr-card__url" data-reveal>
+            <strong>Lien :</strong>
+            <a href="{{ targetUrl }}">{{ targetUrl }}</a>
+        </p>
+
+        <div class="qr-card__actions" data-reveal>
+            <a href="{{ path('qr_tzanet_image') }}" download="qr-tzanet-serviceLab.png" class="btn btn-primary">
+                Télécharger le QR (PNG)
+            </a>
+            <a href="{{ targetUrl }}" class="btn btn-secondary">Voir la page TZANET</a>
+            <button type="button" class="btn btn-secondary" onclick="window.print()">Imprimer</button>
+        </div>
+    </div>
+</section>
+{% endblock %}
