@@ -23,13 +23,17 @@ COPY . .
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
 ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV DATABASE_URL="mysql://root@127.0.0.1:3306/app?serverVersion=8.0&charset=utf8mb4"
 
-# APP_SECRET is only needed so Symfony console can boot during image build.
+# APP_SECRET / DATABASE_URL are only for Symfony console during image build.
 RUN APP_SECRET=build-time-only \
+    DATABASE_URL="mysql://root@127.0.0.1:3306/app?serverVersion=8.0&charset=utf8mb4" \
     composer install --no-dev --optimize-autoloader --no-interaction \
-    && APP_SECRET=build-time-only php bin/console importmap:install --env=prod \
-    && APP_SECRET=build-time-only php bin/console asset-map:compile --env=prod \
+    && APP_SECRET=build-time-only \
+       DATABASE_URL="mysql://root@127.0.0.1:3306/app?serverVersion=8.0&charset=utf8mb4" \
+       php bin/console importmap:install --env=prod \
+    && APP_SECRET=build-time-only \
+       DATABASE_URL="mysql://root@127.0.0.1:3306/app?serverVersion=8.0&charset=utf8mb4" \
+       php bin/console asset-map:compile --env=prod \
     && mkdir -p var/cache var/log var/share \
     && chown -R www-data:www-data var \
     && rm -rf public/_adminer.php public/adminer.php public/adminer-plugins.php public/adminer-plugins
