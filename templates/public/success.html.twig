@@ -1,0 +1,24 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}Demande envoyée — ServiceLab{% endblock %}
+
+{% block body %}
+<section class="success-screen" data-controller="reveal">
+    <div class="success-card" data-reveal>
+        <div class="success-check" aria-hidden="true">✓</div>
+        <h1>Demande envoyée</h1>
+        <p>Votre demande a bien été reçue. Un conseiller ServiceLab vous contactera sous peu.</p>
+        {% if reference %}
+            <p class="success-ref">Référence : <strong>{{ reference }}</strong></p>
+        {% endif %}
+        {% if source == 'TZANET' %}
+            <p><span class="pill pill--success">Offre partenaire TZANET enregistrée</span></p>
+        {% endif %}
+        <p class="success-note">Votre demande est déjà visible dans l’espace équipe ServiceLab pour suivi commercial.</p>
+        <div class="success-actions">
+            <a href="{{ path('app_home') }}" class="btn btn-primary">Retour à l’accueil</a>
+            <a href="{{ path('partner_tzanet') }}" class="btn btn-secondary">Offre TZANET</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

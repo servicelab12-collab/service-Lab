@@ -1,0 +1,62 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ lead.reference }} — Lead{% endblock %}
+{% block page_heading %}Lead {{ lead.reference }}{% endblock %}
+
+{% block content %}
+<section class="admin-page-head">
+    <div>
+        <p class="eyebrow">Lead</p>
+        <h1>{{ lead.nom }}</h1>
+        <p>{{ lead.email }} · {{ lead.telephone }}</p>
+    </div>
+    <div class="admin-page-head__actions">
+        <a href="{{ path('admin_leads') }}" class="btn btn-secondary btn-sm">Retour</a>
+        <a href="{{ path('admin_leads_pdf', {id: lead.id}) }}" data-turbo="false" class="btn btn-secondary btn-sm">Télécharger PDF</a>
+        {% if lead.contract is null %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin_contracts_new', {lead: lead.id}) }}" class="btn btn-primary btn-sm">Créer un contrat</a>
+            {% endif %}
+        {% else %}
+            <a href="{{ path('admin_contracts_show', {id: lead.contract.id}) }}" class="btn btn-primary btn-sm">Voir le contrat</a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="admin-grid">
+    <article class="admin-panel">
+        <div class="admin-panel__head"><div><h2>Détails</h2></div></div>
+        <div class="admin-panel__body admin-detail-list">
+            <div><span>Référence</span><strong>{{ lead.reference }}</strong></div>
+            <div><span>Canal client</span><strong><a href="{{ path(lead.canal.publicRoute) }}">{{ lead.canal.label }}</a></strong></div>
+            <div><span>Source</span><strong>{{ lead.source.label }}</strong></div>
+            <div><span>Machine</span><strong>{{ lead.machineRecherchee }}</strong></div>
+            <div><span>Code promo</span><strong>{{ lead.codePromo ?? '—' }}</strong></div>
+            <div><span>Créé</span><strong>{{ lead.createdAt|date('d/m/Y H:i') }}</strong></div>
+            <div><span>Mis à jour</span><strong>{{ lead.updatedAt|date('d/m/Y H:i') }}</strong></div>
+        </div>
+    </article>
+
+    <article class="admin-panel">
+        <div class="admin-panel__head"><div><h2>Pipeline</h2><p>Statut actuel : {{ lead.status.label }}</p></div></div>
+        <div class="admin-panel__body">
+            {% if is_granted('ROLE_ADMIN') %}
+                <form method="post" action="{{ path('admin_leads_status', {id: lead.id}) }}" class="admin-inline-form">
+                    <input type="hidden" name="_token" value="{{ csrf_token('lead_status_' ~ lead.id) }}">
+                    <label>
+                        <span>Changer le statut</span>
+                        <select name="status">
+                            {% for status in statuses %}
+                                <option value="{{ status.value }}" {% if lead.status == status %}selected{% endif %}>{{ status.label }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
+                </form>
+            {% else %}
+                <p class="text-caption">Consultation seule — le changement de statut est réservé à l’administrateur.</p>
+            {% endif %}
+        </div>
+    </article>
+</section>
+{% endblock %}

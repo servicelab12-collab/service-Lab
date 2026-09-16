@@ -1,0 +1,11 @@
+# Session CSRF for login (reliable without JS).
+# Stateless tokens kept for Symfony Form "submit" only.
+framework:
+    form:
+        csrf_protection:
+            token_id: submit
+
+    csrf_protection:
+        stateless_token_ids:
+            - submit
+            - logout

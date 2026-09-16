@@ -1,0 +1,103 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}Contact — ServiceLab Canada{% endblock %}
+{% block meta_description %}Contactez ServiceLab Canada pour l’offre partenaire TZANET et la location d'équipement de cuisine professionnelle.{% endblock %}
+
+{% block body %}
+<section class="hero hero--compact hero--visual" data-controller="reveal">
+    <div class="hero__media" aria-hidden="true">
+        <img src="{{ asset('images/chef-kitchen.png') }}" alt="" loading="eager">
+        <div class="hero__media-overlay"></div>
+    </div>
+    <div class="hero__inner hero__inner--center">
+        <div data-reveal>
+            <span class="pill pill--primary">Contact</span>
+            <h1 class="hero__title">Parlons de<br><span>votre projet.</span></h1>
+            <p class="hero__lead">Les demandes de location passent par l’offre TZANET. Pour toute autre question, contactez l’équipe ServiceLab.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section" data-controller="reveal">
+    <div class="section__inner contact-layout contact-layout--solo">
+        <div class="contact-aside" data-reveal="left">
+            <p class="eyebrow">Coordonnées</p>
+            <h2>On est là pour vous</h2>
+            <p>Pour louer une machine, utilisez l’offre partenaire TZANET. Sinon, joignez-nous par email ou téléphone.</p>
+
+            <div class="contact-cards">
+                <a class="contact-card" href="mailto:service@servicelabcanada.com">
+                    <span class="contact-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+                    </span>
+                    <div>
+                        <strong>Email</strong>
+                        <span>service@servicelabcanada.com</span>
+                    </div>
+                </a>
+                <a class="contact-card" href="tel:+18772354496">
+                    <span class="contact-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h3l1.5 4.5-2.2 1.4a12 12 0 006.8 6.8l1.4-2.2L21 15v3a2 2 0 01-2 2A14 14 0 014 5a2 2 0 012-2z"/></svg>
+                    </span>
+                    <div>
+                        <strong>Téléphone</strong>
+                        <span>1-877-235-4496</span>
+                    </div>
+                </a>
+                <div class="contact-card contact-card--static">
+                    <span class="contact-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                    </span>
+                    <div>
+                        <strong>Bureau</strong>
+                        <span>5430 rue Royalmount, Montréal, QC</span>
+                    </div>
+                </div>
+                <a class="contact-card contact-card--highlight" href="{{ path('partner_tzanet') }}">
+                    <span class="contact-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v12H4z"/><path d="M8 7V5h8v2"/></svg>
+                    </span>
+                    <div>
+                        <strong>Demande de location</strong>
+                        <span>Accéder à l’offre partenaire TZANET</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trust-row">
+                <div><strong>&lt; 48h</strong><span>délai de rappel</span></div>
+                <div><strong>TZANET</strong><span>parcours unique</span></div>
+                <div><strong>Sécurisé</strong><span>données protégées</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section--muted" data-controller="reveal">
+    <div class="section__inner faq-layout">
+        <div data-reveal>
+            <p class="eyebrow">FAQ</p>
+            <h2>Questions fréquentes</h2>
+            <p>Les réponses essentielles avant de démarrer.</p>
+        </div>
+        <div class="faq-list" data-controller="faq" data-reveal data-reveal-delay="80">
+            <details class="faq-item" open>
+                <summary>Comment déposer une demande de location ?</summary>
+                <p>Uniquement via la page Offre TZANET. La source partenaire est détectée automatiquement.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Combien de temps pour être rappelé ?</summary>
+                <p>En général sous 48h ouvrées. Les demandes TZANET sont traitées en priorité selon l’offre active.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Dois-je acheter la machine ensuite ?</summary>
+                <p>Non. L’offre repose sur la location. Aucun engagement d’achat n’est requis.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Quels équipements sont disponibles ?</summary>
+                <p>Lave-vaisselle vertical ou sous-comptoir (basse / haute température) et lave-verre rotatif, selon vos besoins électriques.</p>
+            </details>
+        </div>
+    </div>
+</section>
+{% endblock %}

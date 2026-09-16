@@ -1,0 +1,42 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Nouveau contrat{% endblock %}
+{% block page_heading %}Nouveau contrat{% endblock %}
+
+{% block content %}
+<section class="admin-page-head">
+    <div>
+        <p class="eyebrow">Signature</p>
+        <h1>Créer un contrat</h1>
+        <p>Pour un lead TZANET, la commission partenaire est calculée automatiquement.</p>
+    </div>
+    <a href="{{ path('admin_contracts') }}" class="btn btn-secondary btn-sm">Retour</a>
+</section>
+
+<section class="admin-panel admin-form-panel">
+    <div class="admin-panel__body">
+        {% if leads is empty %}
+            <div class="admin-empty admin-empty--compact">
+                <div class="admin-empty__copy">
+                    <h3>Aucun lead disponible</h3>
+                    <p>Tous les leads ont déjà un contrat, ou aucun lead n’existe encore.</p>
+                    <a href="{{ path('admin_leads') }}" class="btn btn-primary">Voir les leads</a>
+                </div>
+            </div>
+        {% else %}
+            {{ form_start(form, {attr: {class: 'admin-form'}}) }}
+                {{ form_row(form.lead) }}
+                <div class="admin-form__row">
+                    {{ form_row(form.loyerMensuel) }}
+                    {{ form_row(form.dureeMois) }}
+                </div>
+                {{ form_row(form.dateSignature) }}
+                <div class="admin-form__actions">
+                    <button class="btn btn-primary" type="submit">Créer le contrat</button>
+                    <a href="{{ path('admin_contracts') }}" class="btn btn-secondary">Annuler</a>
+                </div>
+            {{ form_end(form) }}
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

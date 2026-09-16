@@ -1,0 +1,117 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Leads — ServiceLab Partner Portal{% endblock %}
+{% block page_heading %}Leads{% endblock %}
+
+{% block content %}
+<section class="admin-page-head" data-controller="reveal">
+    <div data-reveal>
+        <p class="eyebrow">Pipeline</p>
+        <h1>Suivi des leads</h1>
+        <p>Leads partenaires TZANET — filtrez par statut ou recherchez un client.</p>
+    </div>
+    <div class="admin-page-head__actions" data-reveal data-reveal-delay="80">
+        <a href="{{ path('admin_leads_pdf_all', {status: filters.status, q: filters.q}) }}" data-turbo="false" class="btn btn-secondary btn-sm">PDF tous les leads</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin_contracts_new') }}" class="btn btn-secondary btn-sm">Créer un contrat</a>
+            <a href="{{ path('partner_tzanet') }}" class="btn btn-primary btn-sm">Nouveau lead TZANET</a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="admin-filters admin-panel" data-controller="reveal">
+    <form method="get" class="admin-filters__form" data-reveal>
+        <label>
+            <span>Recherche</span>
+            <input type="search" name="q" value="{{ filters.q }}" placeholder="Nom, e-mail, réf…">
+        </label>
+        <label>
+            <span>Source</span>
+            <select name="source" disabled>
+                {% for source in sources %}
+                    <option value="{{ source.value }}" selected>{{ source.label }}</option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="source" value="TZANET">
+        </label>
+        <label>
+            <span>Statut</span>
+            <select name="status">
+                <option value="">Tous</option>
+                {% for status in statuses %}
+                    <option value="{{ status.value }}" {% if filters.status == status.value %}selected{% endif %}>{{ status.label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <div class="admin-filters__actions">
+            <button type="submit" class="btn btn-primary btn-sm">Filtrer</button>
+            <a href="{{ path('admin_leads') }}" class="btn btn-secondary btn-sm">Réinitialiser</a>
+        </div>
+    </form>
+</section>
+
+<section class="admin-panel" data-controller="reveal">
+    <div class="admin-panel__head" data-reveal>
+        <div>
+            <h2>{{ leads|length }} lead{{ leads|length > 1 ? 's' : '' }}</h2>
+            <p>Demandes issues des formulaires publics</p>
+        </div>
+        {% if leads is not empty %}
+            <a href="{{ path('admin_leads_pdf_all', {status: filters.status, q: filters.q}) }}" data-turbo="false" class="btn btn-secondary btn-sm">Exporter PDF (tous)</a>
+        {% endif %}
+    </div>
+    <div class="admin-panel__body" data-reveal data-reveal-delay="60">
+        {% if leads is empty %}
+            <div class="admin-empty admin-empty--compact">
+                <div class="admin-empty__copy">
+                    <h3>Aucun lead trouvé</h3>
+                    <p>Ajustez les filtres ou créez une demande depuis le site client.</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Réf.</th>
+                            <th>Client</th>
+                            <th>Canal</th>
+                            <th>Source</th>
+                            <th>Statut</th>
+                            <th>Machine</th>
+                            <th>Créé</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lead in leads %}
+                            <tr>
+                                <td><strong>{{ lead.reference }}</strong></td>
+                                <td>
+                                    <div>{{ lead.nom }}</div>
+                                    <div class="text-caption">{{ lead.email }} · {{ lead.telephone }}</div>
+                                </td>
+                                <td>
+                                    <a class="badge badge--canal" href="{{ path(lead.canal.publicRoute) }}">{{ lead.canal.label }}</a>
+                                </td>
+                                <td>
+                                    <span class="badge badge--tzanet">
+                                        {{ lead.source.label }}
+                                    </span>
+                                </td>
+                                <td><span class="badge badge--status">{{ lead.status.label }}</span></td>
+                                <td>{{ lead.machineRecherchee }}</td>
+                                <td>{{ lead.createdAt|date('d/m/Y H:i') }}</td>
+                                <td class="admin-table-actions">
+                                    <a href="{{ path('admin_leads_show', {id: lead.id}) }}" class="btn btn-secondary btn-sm">Voir</a>
+                                    <a href="{{ path('admin_leads_pdf', {id: lead.id}) }}" data-turbo="false" class="btn btn-secondary btn-sm">PDF</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

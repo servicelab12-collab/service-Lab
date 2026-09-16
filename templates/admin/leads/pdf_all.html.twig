@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Export leads TZANET</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 11px;
+            color: #1a1f2c;
+            margin: 0;
+            padding: 24px 28px;
+            line-height: 1.4;
+        }
+        .header {
+            border-bottom: 2px solid #1e4fd6;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .brand { color: #1e4fd6; font-weight: bold; font-size: 12px; margin-bottom: 4px; }
+        h1 { margin: 0 0 4px; font-size: 18px; }
+        .meta { margin: 0; color: #5b6475; font-size: 10px; }
+        table.summary {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+        table.summary th,
+        table.summary td {
+            border: 1px solid #d9dee8;
+            padding: 6px 5px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 9px;
+        }
+        table.summary th {
+            background: #f4f7fc;
+            color: #5b6475;
+            font-weight: bold;
+        }
+        .page-break { page-break-before: always; }
+        h2 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #1e4fd6;
+            border-bottom: 1px solid #d9dee8;
+            padding-bottom: 5px;
+            margin: 18px 0 8px;
+        }
+        table.detail { width: 100%; border-collapse: collapse; }
+        table.detail th, table.detail td {
+            text-align: left;
+            padding: 5px 6px;
+            border-bottom: 1px solid #e8ecf2;
+            vertical-align: top;
+        }
+        table.detail th { width: 36%; color: #5b6475; font-weight: normal; }
+        table.detail td { font-weight: bold; }
+        .muted { color: #5b6475; font-weight: normal; }
+        .footer {
+            margin-top: 20px;
+            padding-top: 8px;
+            border-top: 1px solid #d9dee8;
+            font-size: 9px;
+            color: #7a8494;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand">ServiceLab Partner Portal · TZANET</div>
+        <h1>Export complet — clients &amp; contrats</h1>
+        <p class="meta">{{ leads|length }} lead{{ leads|length > 1 ? 's' : '' }} · Généré le {{ generatedAt|date('d/m/Y H:i') }}</p>
+    </div>
+
+    <h2>Synthèse</h2>
+    <table class="summary">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Client</th>
+                <th>Contact</th>
+                <th>Statut</th>
+                <th>Machine</th>
+                <th>Loyer</th>
+                <th>Commission</th>
+                <th>Achats</th>
+                <th>Total TZANET</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lead in leads %}
+                {% set contract = lead.contract %}
+                {% set commission = contract ? contract.commission : null %}
+                <tr>
+                    <td>{{ lead.reference }}</td>
+                    <td>{{ lead.nom }}</td>
+                    <td>{{ lead.email }}<br>{{ lead.telephone }}</td>
+                    <td>{{ lead.status.label }}</td>
+                    <td>{{ lead.machineRecherchee }}</td>
+                    <td>{% if contract %}${{ contract.loyerMensuel }}{% else %}—{% endif %}</td>
+                    <td>{% if commission %}${{ commission.montantSignature }}{% else %}—{% endif %}</td>
+                    <td>{% if commission %}${{ commission.achatsAnnuel }}{% else %}—{% endif %}</td>
+                    <td>{% if commission %}${{ commission.totalTzanet }}{% else %}—{% endif %}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="9">Aucun lead à exporter.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% for lead in leads %}
+        {% set contract = lead.contract %}
+        {% set commission = contract ? contract.commission : null %}
+        <div class="page-break">
+            <div class="header">
+                <div class="brand">Fiche détaillée</div>
+                <h1>{{ lead.nom }}</h1>
+                <p class="meta">{{ lead.reference }} · {{ lead.status.label }}</p>
+            </div>
+
+            <h2>Client</h2>
+            <table class="detail">
+                <tr><th>E-mail</th><td>{{ lead.email }}</td></tr>
+                <tr><th>Téléphone</th><td>{{ lead.telephone }}</td></tr>
+                <tr><th>Source / canal</th><td>{{ lead.source.label }} · {{ lead.canal.label }}</td></tr>
+                <tr><th>Code promo</th><td>{{ lead.codePromo ?? '—' }}</td></tr>
+                <tr><th>Créé le</th><td>{{ lead.createdAt|date('d/m/Y H:i') }}</td></tr>
+            </table>
+
+            <h2>Équipement (device)</h2>
+            <table class="detail">
+                <tr><th>Machine</th><td>{{ lead.machineRecherchee }}</td></tr>
+            </table>
+
+            <h2>Contrat</h2>
+            {% if contract %}
+                <table class="detail">
+                    <tr><th>N° contrat</th><td>#{{ contract.id }}</td></tr>
+                    <tr><th>Loyer mensuel</th><td>${{ contract.loyerMensuel }}</td></tr>
+                    <tr><th>1er mois</th><td>{{ contract.premierMoisGratuit ? 'Gratuit (code TZANET)' : 'Payant' }}</td></tr>
+                    <tr><th>Durée</th><td>{{ contract.dureeMois }} mois</td></tr>
+                    <tr><th>Signature</th><td>{{ contract.dateSignature|date('d/m/Y') }}</td></tr>
+                    <tr><th>Statut</th><td>{{ contract.statut.label }}</td></tr>
+                    {% if contract.offer %}
+                        <tr><th>Offre appliquée</th><td>#{{ contract.offer.id }} · {{ contract.offer.retourAnnuel }}% · {{ contract.offer.premierMoisGratuit ? '1er mois gratuit' : '1er mois payant' }}</td></tr>
+                    {% endif %}
+                </table>
+            {% else %}
+                <p class="muted">Aucun contrat.</p>
+            {% endif %}
+
+            <h2>Commission TZANET</h2>
+            {% if commission %}
+                <table class="detail">
+                    <tr><th>Commission référencement</th><td>${{ commission.montantSignature }}</td></tr>
+                    <tr><th>Achats annuels</th><td>${{ commission.achatsAnnuel }}</td></tr>
+                    <tr><th>Retour {{ commission.retourAnnuel }}%</th><td>${{ commission.montantRetour }}</td></tr>
+                    <tr><th>Total TZANET</th><td>${{ commission.totalTzanet }}</td></tr>
+                    <tr><th>Statut commission</th><td>{{ commission.statut.label }}</td></tr>
+                </table>
+            {% else %}
+                <p class="muted">Aucune commission.</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <div class="footer">
+        Export ServiceLab Canada × TZANET · Confidentiel · {{ generatedAt|date('d/m/Y H:i') }}
+    </div>
+</body>
+</html>

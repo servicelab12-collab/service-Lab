@@ -1,0 +1,245 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}ServiceLab Canada — Location d'équipements professionnels{% endblock %}
+
+{% block body %}
+<section class="hero hero--visual" data-controller="reveal">
+    <div class="hero__media" aria-hidden="true">
+        <img src="{{ asset('images/hero-kitchen.png') }}" alt="" width="1600" height="900" loading="eager">
+        <div class="hero__media-overlay"></div>
+    </div>
+    <div class="hero__inner hero__inner--clean">
+        <div class="hero__content" data-reveal data-reveal-delay="0">
+            <span class="pill pill--primary">ServiceLab × Cuisine professionnelle</span>
+            <h1 class="hero__title">Louez votre machine.<br><span>Sans l’acheter.</span></h1>
+            <p class="hero__lead">Équipements, produits et maintenance pour les cuisines commerciales — avec une offre dédiée aux clients TZANET.</p>
+            <div class="hero__actions">
+                <a href="{{ path('partner_tzanet') }}" class="btn btn-primary btn-lg">Offre TZANET</a>
+                <a href="{{ path('app_contact') }}" class="btn btn-secondary btn-lg">Nous contacter</a>
+            </div>
+            <ul class="hero__highlights" data-reveal data-reveal-delay="120">
+                <li>
+                    <span class="hero__check" aria-hidden="true">✓</span>
+                    Offre exclusive TZANET
+                </li>
+                <li>
+                    <span class="hero__check" aria-hidden="true">✓</span>
+                    Source partenaire auto
+                </li>
+                <li>
+                    <span class="hero__check" aria-hidden="true">✓</span>
+                    Sans engagement d’achat
+                </li>
+            </ul>
+        </div>
+
+        <div class="hero-showcase" data-reveal="scale" data-reveal-delay="100">
+            <div class="hero-showcase__frame">
+                <img src="{{ asset('images/equipment-dishwasher.png') }}" alt="Équipement de cuisine professionnelle" width="800" height="600" loading="eager">
+            </div>
+            <div class="hero-float-card">
+                <span class="hero-float-card__badge">Partenariat TZANET</span>
+                <strong>De la boutique à la location</strong>
+                <p>Scan QR → demande → ServiceLab vous contacte.</p>
+            </div>
+            <div class="hero-float-chip" aria-hidden="true">
+                <span class="hero-float-chip__dot"></span>
+                Équipement pro prêt
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="trust-bar" data-controller="reveal counters">
+    <div class="section__inner trust-bar__inner" data-reveal>
+        <div class="trust-item">
+            <strong data-counters-target="value" data-to="30" data-suffix="s">0s</strong>
+            <span>pour déposer une demande</span>
+        </div>
+        <div class="trust-item">
+            <strong data-counters-target="value" data-to="48" data-suffix="h">0h</strong>
+            <span>délai de rappel moyen</span>
+        </div>
+        <div class="trust-item">
+            <strong>QR</strong>
+            <span>source TZANET automatique</span>
+        </div>
+        <div class="trust-item">
+            <strong>0</strong>
+            <span>engagement d’achat</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section--gallery" data-controller="reveal">
+    <div class="section__inner">
+        <div class="section__intro" data-reveal>
+            <p class="eyebrow">L’expérience ServiceLab</p>
+            <h2>Des cuisines qui tournent, sans immobiliser votre capital</h2>
+        </div>
+        <div class="gallery-grid">
+            <figure class="gallery-card gallery-card--large" data-reveal data-reveal-delay="40">
+                <img src="{{ asset('images/chef-kitchen.png') }}" alt="Chef en cuisine professionnelle" width="900" height="700" loading="lazy">
+                <figcaption>
+                    <strong>Performance en cuisine</strong>
+                    <span>Machines fiables pour les services intensifs</span>
+                </figcaption>
+            </figure>
+            <figure class="gallery-card" data-reveal data-reveal-delay="100">
+                <img src="{{ asset('images/restaurant-interior.png') }}" alt="Salle de restaurant moderne" width="700" height="550" loading="lazy">
+                <figcaption>
+                    <strong>Pour les restos</strong>
+                    <span>Une image pro, côté salle et cuisine</span>
+                </figcaption>
+            </figure>
+            <figure class="gallery-card" data-reveal data-reveal-delay="160">
+                <img src="{{ asset('images/equipment-dishwasher.png') }}" alt="Lave-vaisselle professionnel" width="700" height="550" loading="lazy">
+                <figcaption>
+                    <strong>Machines incluses</strong>
+                    <span>Location + entretien + produits</span>
+                </figcaption>
+            </figure>
+        </div>
+    </div>
+</section>
+
+<section class="section section--muted" data-controller="reveal">
+    <div class="section__inner">
+        <div class="section__intro" data-reveal>
+            <p class="eyebrow">Pourquoi ServiceLab</p>
+            <h2>Une solution clé en main</h2>
+            <p>Tout ce qu’il faut pour équiper votre cuisine sans immobiliser votre capital.</p>
+        </div>
+        <div class="benefit-grid benefit-grid--visual">
+            <article class="benefit-card benefit-card--media" data-reveal data-reveal-delay="40">
+                <div class="benefit-card__thumb">
+                    <img src="{{ asset('images/equipment-dishwasher.png') }}" alt="" loading="lazy">
+                </div>
+                <div class="benefit-card__icon">01</div>
+                <h3>Équipement prêt</h3>
+                <p>Machines professionnelles mises à disposition selon votre besoin.</p>
+            </article>
+            <article class="benefit-card benefit-card--media" data-reveal data-reveal-delay="100">
+                <div class="benefit-card__thumb">
+                    <img src="{{ asset('images/hero-kitchen.png') }}" alt="" loading="lazy">
+                </div>
+                <div class="benefit-card__icon">02</div>
+                <h3>Produits inclus</h3>
+                <p>Produits d’entretien intégrés dans le forfait de location.</p>
+            </article>
+            <article class="benefit-card benefit-card--media" data-reveal data-reveal-delay="160">
+                <div class="benefit-card__thumb">
+                    <img src="{{ asset('images/chef-kitchen.png') }}" alt="" loading="lazy">
+                </div>
+                <div class="benefit-card__icon">03</div>
+                <h3>Maintenance</h3>
+                <p>Dépannage et accompagnement pour garder votre cuisine opérationnelle.</p>
+            </article>
+            <article class="benefit-card benefit-card--media" data-reveal data-reveal-delay="220">
+                <div class="benefit-card__thumb">
+                    <img src="{{ asset('images/restaurant-interior.png') }}" alt="" loading="lazy">
+                </div>
+                <div class="benefit-card__icon">04</div>
+                <h3>Sans achat forcé</h3>
+                <p>Aucun engagement d’achat — flexibilité pour votre budget.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section section--spotlight" data-controller="reveal">
+    <div class="section__inner spotlight">
+        <div class="spotlight__media" data-reveal="left">
+            <img src="{{ asset('images/hero-kitchen.png') }}" alt="Cuisine commerciale équipée ServiceLab" width="1000" height="700" loading="lazy">
+        </div>
+        <div class="spotlight__copy" data-reveal data-reveal-delay="100">
+            <p class="eyebrow">Comment ça marche</p>
+            <h2>3 étapes pour démarrer</h2>
+            <ol class="steps-list">
+                <li><strong>Demande</strong> — formulaire en 30 secondes</li>
+                <li><strong>Conseil</strong> — un expert analyse votre besoin</li>
+                <li><strong>Installation</strong> — machine + suivi ServiceLab</li>
+            </ol>
+            <a href="{{ path('partner_tzanet') }}" class="btn btn-primary btn-lg">Je démarre maintenant</a>
+        </div>
+    </div>
+</section>
+
+<section class="section section--muted" data-controller="reveal">
+    <div class="section__inner">
+        <div class="section__intro" data-reveal>
+            <p class="eyebrow">Ils nous font confiance</p>
+            <h2>Des cuisines qui avancent avec ServiceLab</h2>
+        </div>
+        <div class="testimonial-grid">
+            <article class="testimonial-card" data-reveal data-reveal-delay="40">
+                <p>“On a évité un gros investissement. La machine est installée, l’entretien est clair.”</p>
+                <div class="testimonial-meta">
+                    <strong>Josée B.</strong>
+                    <span>Restauratrice — Montréal</span>
+                </div>
+            </article>
+            <article class="testimonial-card" data-reveal data-reveal-delay="100">
+                <p>“Le QR TZANET a simplifié tout le parcours. Le client arrive déjà qualifié.”</p>
+                <div class="testimonial-meta">
+                    <strong>Marc L.</strong>
+                    <span>Conseiller TZANET</span>
+                </div>
+            </article>
+            <article class="testimonial-card" data-reveal data-reveal-delay="160">
+                <p>“Le suivi commercial est structuré. On voit exactement d’où vient chaque lead.”</p>
+                <div class="testimonial-meta">
+                    <strong>Équipe ServiceLab</strong>
+                    <span>Opérations</span>
+                </div>
+            </article>
+        </div>
+        <div class="logo-strip" data-reveal data-reveal-delay="80" aria-label="Partenaires">
+            <span>ServiceLab</span>
+            <span>TZANET</span>
+            <span>Cuisines pro</span>
+            <span>Location</span>
+            <span>Maintenance</span>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="demande" data-controller="reveal">
+    <div class="section__inner split-panel">
+        <div class="split-panel__copy" data-reveal="left">
+            <p class="eyebrow">Partenariat TZANET</p>
+            <h2>Une offre dédiée aux clients TZANET</h2>
+            <p>Les demandes de location passent exclusivement par l’offre partenaire TZANET — avec avantages et suivi commission.</p>
+            <div class="split-thumb" aria-hidden="true">
+                <img src="{{ asset('images/restaurant-interior.png') }}" alt="" loading="lazy">
+            </div>
+            <ul class="check-list">
+                <li>Premier mois offert selon l’offre active</li>
+                <li>Source TZANET détectée automatiquement</li>
+                <li>Suivi transparent dans le Partner Portal</li>
+            </ul>
+        </div>
+        <aside class="partner-cta" data-reveal="scale" data-reveal-delay="120">
+            <div class="partner-cta__badge">
+                <span class="partner-cta__dot" aria-hidden="true"></span>
+                Accès partenaire
+            </div>
+            <img
+                class="partner-cta__logo"
+                src="{{ asset('images/brands/tzanet-logo.png') }}"
+                alt="TZANET"
+                width="140"
+                height="38"
+            >
+            <h3 class="partner-cta__title">Déposer une demande TZANET</h3>
+            <p class="partner-cta__text">Remplissez le formulaire dédié : un conseiller vous recontacte rapidement.</p>
+            <ul class="partner-cta__list">
+                <li>Offre exclusive</li>
+                <li>Réponse sous 48h</li>
+                <li>Sans achat obligatoire</li>
+            </ul>
+            <a href="{{ path('partner_tzanet') }}" class="btn btn-primary btn-lg partner-cta__btn">Aller à l’offre TZANET</a>
+        </aside>
+    </div>
+</section>
+{% endblock %}

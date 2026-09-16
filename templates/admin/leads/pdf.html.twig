@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Fiche client {{ lead.reference }}</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 12px;
+            color: #1a1f2c;
+            margin: 0;
+            padding: 28px 32px;
+            line-height: 1.45;
+        }
+        .header {
+            border-bottom: 2px solid #1e4fd6;
+            padding-bottom: 14px;
+            margin-bottom: 22px;
+        }
+        .header h1 {
+            margin: 0 0 4px;
+            font-size: 20px;
+            color: #0f141c;
+        }
+        .header p {
+            margin: 0;
+            color: #5b6475;
+            font-size: 11px;
+        }
+        .brand {
+            color: #1e4fd6;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+        h2 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #1e4fd6;
+            border-bottom: 1px solid #d9dee8;
+            padding-bottom: 6px;
+            margin: 22px 0 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 7px 8px;
+            vertical-align: top;
+            border-bottom: 1px solid #e8ecf2;
+        }
+        th {
+            width: 38%;
+            color: #5b6475;
+            font-weight: normal;
+        }
+        td { font-weight: bold; }
+        .box {
+            background: #f4f7fc;
+            border: 1px solid #d9dee8;
+            border-radius: 6px;
+            padding: 12px 14px;
+            margin-top: 8px;
+        }
+        .box p { margin: 0 0 6px; }
+        .box p:last-child { margin: 0; }
+        .muted { color: #5b6475; font-weight: normal; }
+        .footer {
+            margin-top: 28px;
+            padding-top: 10px;
+            border-top: 1px solid #d9dee8;
+            font-size: 10px;
+            color: #7a8494;
+        }
+        .total {
+            font-size: 14px;
+            color: #0f141c;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand">ServiceLab Partner Portal · TZANET</div>
+        <h1>Fiche client &amp; contrat</h1>
+        <p>Référence {{ lead.reference }} · Généré le {{ generatedAt|date('d/m/Y H:i') }}</p>
+    </div>
+
+    <h2>Client</h2>
+    <table>
+        <tr><th>Nom</th><td>{{ lead.nom }}</td></tr>
+        <tr><th>E-mail</th><td>{{ lead.email }}</td></tr>
+        <tr><th>Téléphone</th><td>{{ lead.telephone }}</td></tr>
+        <tr><th>Statut pipeline</th><td>{{ lead.status.label }}</td></tr>
+        <tr><th>Source / canal</th><td>{{ lead.source.label }} · {{ lead.canal.label }}</td></tr>
+        <tr><th>Code promo</th><td>{{ lead.codePromo ?? '—' }}</td></tr>
+        <tr><th>Créé le</th><td>{{ lead.createdAt|date('d/m/Y H:i') }}</td></tr>
+    </table>
+
+    <h2>Équipement (device)</h2>
+    <table>
+        <tr><th>Machine recherchée</th><td>{{ lead.machineRecherchee }}</td></tr>
+    </table>
+
+    <h2>Contrat</h2>
+    {% if contract %}
+        <table>
+            <tr><th>N° contrat</th><td>#{{ contract.id }}</td></tr>
+            <tr><th>Loyer mensuel</th><td>${{ contract.loyerMensuel }}</td></tr>
+            <tr><th>1er mois</th><td>{{ contract.premierMoisGratuit ? 'Gratuit (code TZANET)' : 'Payant' }}</td></tr>
+            <tr><th>Durée</th><td>{{ contract.dureeMois }} mois</td></tr>
+            <tr><th>Date de signature</th><td>{{ contract.dateSignature|date('d/m/Y') }}</td></tr>
+            <tr><th>Période retour annuel</th><td>{{ contract.dateSignature|date('d/m/Y') }} → {{ contract.dateSignature|date_modify('+1 year -1 day')|date('d/m/Y') }}</td></tr>
+            <tr><th>Statut contrat</th><td>{{ contract.statut.label }}</td></tr>
+            {% if contract.offer %}
+                <tr><th>Offre appliquée</th><td>#{{ contract.offer.id }} · retour {{ contract.offer.retourAnnuel }}% · {{ contract.offer.premierMoisGratuit ? '1er mois gratuit' : '1er mois payant' }}</td></tr>
+            {% endif %}
+        </table>
+    {% else %}
+        <p class="muted">Aucun contrat associé à ce lead.</p>
+    {% endif %}
+
+    <h2>Commission TZANET</h2>
+    {% if commission %}
+        <table>
+            <tr><th>Commission référencement</th><td>${{ commission.montantSignature }}</td></tr>
+            <tr><th>Achats annuels</th><td>${{ commission.achatsAnnuel }}</td></tr>
+            <tr><th>Retour {{ commission.retourAnnuel }}&nbsp;%</th><td>${{ commission.montantRetour }}</td></tr>
+            <tr><th>Total TZANET</th><td class="total">${{ commission.totalTzanet }}</td></tr>
+            <tr><th>Statut commission</th><td>{{ commission.statut.label }}</td></tr>
+            <tr><th>Date de paiement</th><td>{{ commission.datePaiement ? commission.datePaiement|date('d/m/Y') : '—' }}</td></tr>
+        </table>
+        <div class="box">
+            <p><strong>Règles partenaires</strong></p>
+            <p>• Client code TZANET : 1er mois de location offert</p>
+            <p>• Commission signature = 1 mois de loyer (ex. ${{ contract.loyerMensuel }})</p>
+            <p>• Retour annuel = {{ commission.retourAnnuel }}&nbsp;% des achats du client</p>
+        </div>
+    {% else %}
+        <p class="muted">Aucune commission (contrat non signé ou hors TZANET).</p>
+    {% endif %}
+
+    <div class="footer">
+        Document généré automatiquement — ServiceLab Canada × TZANET · Confidentiel
+    </div>
+</body>
+</html>

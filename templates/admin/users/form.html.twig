@@ -1,0 +1,29 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_heading %}{{ title }}{% endblock %}
+
+{% block content %}
+<section class="admin-page-head">
+    <div>
+        <p class="eyebrow">Utilisateurs</p>
+        <h1>{{ title }}</h1>
+    </div>
+    <a href="{{ path('admin_users') }}" class="btn btn-secondary btn-sm">Retour</a>
+</section>
+
+<section class="admin-panel admin-form-panel">
+    <div class="admin-panel__body">
+        {{ form_start(form, {attr: {class: 'admin-form'}}) }}
+            {{ form_row(form.nom) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.roleChoice) }}
+            {{ form_row(form.plainPassword) }}
+            <div class="admin-form__actions">
+                <button class="btn btn-primary" type="submit">Enregistrer</button>
+                <a href="{{ path('admin_users') }}" class="btn btn-secondary">Annuler</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</section>
+{% endblock %}

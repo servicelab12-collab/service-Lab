@@ -1,0 +1,146 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Commissions — ServiceLab Partner Portal{% endblock %}
+{% block page_heading %}Commissions{% endblock %}
+
+{% block content %}
+<section class="admin-page-head">
+    <div>
+        <p class="eyebrow">Partenaire TZANET</p>
+        <h1>Commissions</h1>
+        <p>Commission signature (1 mois) + retour annuel 2&nbsp;% sur les achats du client.</p>
+        {% if not app.user.isAdmin %}
+            <p class="text-caption">Mode consultation — aucune modification possible.</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="admin-kpi-grid admin-kpi-grid--4">
+    <article class="admin-kpi admin-kpi--money">
+        <div class="admin-kpi__top"><span class="admin-kpi__tag">Due</span></div>
+        <p class="admin-kpi__value admin-kpi__value--money">${{ due|number_format(2, '.', ',') }}</p>
+        <p class="admin-kpi__label">Commissions à payer</p>
+        <p class="text-caption">Référencement non réglé uniquement</p>
+    </article>
+    <article class="admin-kpi admin-kpi--green">
+        <div class="admin-kpi__top"><span class="admin-kpi__tag">Payé</span></div>
+        <p class="admin-kpi__value">${{ paid|number_format(2, '.', ',') }}</p>
+        <p class="admin-kpi__label">Commissions réglées</p>
+        <p class="text-caption">Référencement déjà payé</p>
+    </article>
+    <article class="admin-kpi">
+        <div class="admin-kpi__top"><span class="admin-kpi__tag">Retour</span></div>
+        <p class="admin-kpi__value">${{ retourTotal|number_format(2, '.', ',') }}</p>
+        <p class="admin-kpi__label">Retour 2&nbsp;% (liste filtrée)</p>
+    </article>
+    <article class="admin-kpi">
+        <div class="admin-kpi__top"><span class="admin-kpi__tag">Total</span></div>
+        <p class="admin-kpi__value">${{ totalTzanet|number_format(2, '.', ',') }}</p>
+        <p class="admin-kpi__label">Total TZANET (liste)</p>
+    </article>
+</section>
+
+<section class="admin-filters admin-panel">
+    <form method="get" class="admin-filters__form">
+        <label>
+            <span>Statut</span>
+            <select name="status">
+                <option value="">Tous</option>
+                <option value="A_PAYER" {% if filters.status == 'A_PAYER' %}selected{% endif %}>À payer</option>
+                <option value="PAYEE" {% if filters.status == 'PAYEE' %}selected{% endif %}>Payée</option>
+            </select>
+        </label>
+        <div class="admin-filters__actions">
+            <button type="submit" class="btn btn-primary btn-sm">Filtrer</button>
+            <a href="{{ path('admin_commissions') }}" class="btn btn-secondary btn-sm">Réinitialiser</a>
+        </div>
+    </form>
+</section>
+
+<section class="admin-panel">
+    <div class="admin-panel__body">
+        {% if commissions is empty %}
+            <div class="admin-empty admin-empty--compact">
+                <div class="admin-empty__copy">
+                    <h3>Aucune commission</h3>
+                    <p>Les commissions apparaissent quand un contrat TZANET est signé.</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Commission référencement</th>
+                            <th>Achats annuels</th>
+                            <th>Retour {{ commissions[0].retourAnnuel }}&nbsp;%</th>
+                            <th>Total TZANET</th>
+                            <th>Statut</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for commission in commissions %}
+                            <tr>
+                                <td>
+                                    <strong>{{ commission.contract.lead.nom }}</strong>
+                                    <div class="text-caption">{{ commission.contract.lead.reference }} · loyer ${{ commission.contract.loyerMensuel }}/mois</div>
+                                </td>
+                                <td>
+                                    {% if app.user.isAdmin %}
+                                        <form method="post" action="{{ path('admin_commissions_montant', {id: commission.id}) }}" class="inline-achat-form" data-turbo="false">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('commission_montant_' ~ commission.id) }}">
+                                            <input type="hidden" name="_redirect" value="{{ path('admin_commissions', {status: filters.status}) }}">
+                                            <div class="inline-achat-form__row">
+                                                <span class="text-caption">$</span>
+                                                <input type="number" name="montant_signature" min="0" step="0.01" value="{{ commission.montantSignature }}" aria-label="Commission référencement">
+                                                <button type="submit" class="btn btn-secondary btn-sm">OK</button>
+                                            </div>
+                                        </form>
+                                    {% else %}
+                                        <strong>${{ commission.montantSignature }}</strong>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {# Achats annuels : lecture seule pour le commercial #}
+                                    {% if app.user.isAdmin %}
+                                        <form method="post" action="{{ path('admin_commissions_achats', {id: commission.id}) }}" class="inline-achat-form" data-turbo="false">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('commission_achats_' ~ commission.id) }}">
+                                            <input type="hidden" name="_redirect" value="{{ path('admin_commissions', {status: filters.status}) }}">
+                                            <div class="inline-achat-form__row">
+                                                <span class="text-caption">$</span>
+                                                <input type="number" name="achats_annuel" min="0" step="0.01" value="{{ commission.achatsAnnuel }}" aria-label="Achats annuels">
+                                                <button type="submit" class="btn btn-secondary btn-sm">OK</button>
+                                            </div>
+                                        </form>
+                                    {% else %}
+                                        <strong>${{ commission.achatsAnnuel }}</strong>
+                                    {% endif %}
+                                </td>
+                                <td><strong>${{ commission.montantRetour }}</strong></td>
+                                <td><strong>${{ commission.totalTzanet }}</strong></td>
+                                <td><span class="badge badge--status">{{ commission.statut.label }}</span></td>
+                                <td>
+                                    {% if commission.statut.value == 'A_PAYER' %}
+                                        {% if app.user.isAdmin %}
+                                            <form method="post" action="{{ path('admin_commissions_pay', {id: commission.id}) }}" data-turbo="false">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('commission_pay_' ~ commission.id) }}">
+                                                <button type="submit" class="btn btn-primary btn-sm" title="Retire ${{ commission.montantSignature }} des commissions à payer">Marquer payée</button>
+                                            </form>
+                                        {% else %}
+                                            <span class="text-caption">À payer</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="text-caption">{{ commission.datePaiement ? commission.datePaiement|date('d/m/Y') : 'Payée' }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

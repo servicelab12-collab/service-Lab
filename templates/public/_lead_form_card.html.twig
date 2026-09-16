@@ -1,0 +1,132 @@
+<div class="lead-card" data-controller="lead-form">
+    <div class="lead-card__source is-tzanet">
+        <span class="status-dot" aria-hidden="true"></span>
+        {{ source_label|default('Source détectée : TZANET') }}
+    </div>
+
+    {{ form_start(form, {
+        attr: {
+            class: 'lead-form',
+            'data-lead-form-target': 'form',
+            'data-action': 'submit->lead-form#submit',
+            novalidate: true
+        }
+    }) }}
+
+        <div class="form-field {% if form.nom.vars.errors|length %}has-error{% endif %}">
+            {{ form_label(form.nom) }}
+            <div class="input-wrap">
+                <span class="input-icon" aria-hidden="true">
+                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M10 10a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.3 0-6 2-6 4v1h12v-1c0-2-2.7-4-6-4Z"/></svg>
+                </span>
+                {{ form_widget(form.nom) }}
+            </div>
+            {{ form_errors(form.nom) }}
+        </div>
+
+        <div class="form-field {% if form.telephone.vars.errors|length %}has-error{% endif %}">
+            {{ form_label(form.telephone) }}
+            <div class="input-wrap">
+                <span class="input-icon" aria-hidden="true">
+                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M4.5 3h3l1 3-2 1.5a10 10 0 0 0 4.5 4.5L12.5 10l3 1v3a1.5 1.5 0 0 1-1.5 1.5A12.5 12.5 0 0 1 3 4.5 1.5 1.5 0 0 1 4.5 3Z"/></svg>
+                </span>
+                {{ form_widget(form.telephone) }}
+            </div>
+            {{ form_errors(form.telephone) }}
+        </div>
+
+        <div class="form-field {% if form.email.vars.errors|length %}has-error{% endif %}">
+            {{ form_label(form.email) }}
+            <div class="input-wrap">
+                <span class="input-icon" aria-hidden="true">
+                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h13A1.5 1.5 0 0 1 18 5.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 2 14.5v-9Zm1.6-.3 6.4 4.5 6.4-4.5H3.6Zm12.9 1.7-5.7 4a1.5 1.5 0 0 1-1.6 0l-5.7-4v7.6h13V6.9Z"/></svg>
+                </span>
+                {{ form_widget(form.email) }}
+            </div>
+            {{ form_errors(form.email) }}
+        </div>
+
+        {% set machineCatalog = [
+            {
+                value: 'Lave-vaisselle vertical basse température (120 V - 20 Amp)',
+                label: 'Vertical basse temp.',
+                hint: '120 V · 20 Amp',
+                image: 'machines/lv-vertical-basse.png'
+            },
+            {
+                value: 'Lave-vaisselle vertical haute température (240 V - 40 Amp)',
+                label: 'Vertical haute temp.',
+                hint: '240 V · 40 Amp',
+                image: 'machines/lv-vertical-haute.png'
+            },
+            {
+                value: 'Lave-vaisselle sous comptoir basse température (120 V - 20 Amp)',
+                label: 'Sous-comptoir basse temp.',
+                hint: '120 V · 20 Amp',
+                image: 'machines/lv-sous-comptoir-basse.png'
+            },
+            {
+                value: 'Lave-vaisselle sous comptoir haute température (240 V - 40 Amp)',
+                label: 'Sous-comptoir haute temp.',
+                hint: '240 V · 40 Amp',
+                image: 'machines/lv-sous-comptoir-haute.png'
+            },
+            {
+                value: 'Lave-verre rotatif (240 V - 40 Amp)',
+                label: 'Lave-verre rotatif',
+                hint: '240 V · 40 Amp',
+                image: 'machines/lave-verre-rotatif.png'
+            },
+            {
+                value: 'Machine convoyeur (240 V)',
+                label: 'Machine convoyeur',
+                hint: '240 V · convoyeur',
+                image: 'machines/machine-convoyeur.jpg'
+            }
+        ] %}
+
+        <div class="form-field {% if form.machineRecherchee.vars.errors|length %}has-error{% endif %}" data-controller="machine-picker">
+            <span class="machine-picker__label">{{ form_label(form.machineRecherchee) }}</span>
+            <p class="machine-picker__help">Choisissez le modèle à louer — cliquez sur la photo</p>
+
+            {{ form_widget(form.machineRecherchee, {
+                attr: {
+                    class: 'machine-picker__select',
+                    'data-machine-picker-target': 'input',
+                    'aria-label': 'Machine recherchée'
+                }
+            }) }}
+
+            <div class="machine-picker__grid" role="listbox" aria-label="Machines à louer">
+                {% for machine in machineCatalog %}
+                    <button
+                        type="button"
+                        class="machine-card"
+                        role="option"
+                        data-machine-picker-target="card"
+                        data-value="{{ machine.value }}"
+                        data-action="machine-picker#select"
+                        aria-pressed="false"
+                    >
+                        <span class="machine-card__media">
+                            <img src="{{ asset('images/' ~ machine.image) }}" alt="{{ machine.label }}" loading="lazy" width="320" height="220">
+                        </span>
+                        <span class="machine-card__body">
+                            <strong>{{ machine.label }}</strong>
+                            <small>{{ machine.hint }}</small>
+                        </span>
+                        <span class="machine-card__check" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg>
+                        </span>
+                    </button>
+                {% endfor %}
+            </div>
+            {{ form_errors(form.machineRecherchee) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" data-lead-form-target="button">
+            <span data-lead-form-target="label">{{ cta_label }}</span>
+            <span class="btn-spinner" data-lead-form-target="spinner" hidden aria-hidden="true"></span>
+        </button>
+    {{ form_end(form) }}
+</div>

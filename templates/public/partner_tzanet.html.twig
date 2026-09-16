@@ -1,0 +1,76 @@
+{% extends 'base_public.html.twig' %}
+
+{% block title %}Offre partenaire TZANET — ServiceLab{% endblock %}
+
+{% block body %}
+<section class="hero hero--compact hero--visual" data-controller="reveal">
+    <div class="hero__media" aria-hidden="true">
+        <img src="{{ asset('images/equipment-dishwasher.png') }}" alt="" width="1600" height="900" loading="eager">
+        <div class="hero__media-overlay"></div>
+    </div>
+    <div class="hero__inner hero__inner--center">
+        <div data-reveal>
+            <span class="pill pill--primary pill--brands">
+                <img src="{{ asset('images/brands/servicelab-logo-white.png') }}" alt="" width="72" height="24">
+                <span aria-hidden="true">×</span>
+                <img src="{{ asset('images/brands/tzanet-logo.png') }}" alt="" width="72" height="20">
+                <span class="visually-hidden">ServiceLab × TZANET</span>
+            </span>
+            <h1 class="hero__title">Offre exclusive<br>clients TZANET</h1>
+            {% if offer and offer.premierMoisGratuit %}
+                <span class="pill pill--success">Premier mois de location offert</span>
+            {% endif %}
+            <p class="hero__lead">Une solution de location professionnelle pour votre équipement de cuisine.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section" data-controller="reveal">
+    <div class="section__inner split-panel">
+        <div class="split-panel__copy" data-reveal="left">
+            <h2>Louez votre machine, sans l’acheter</h2>
+            <p>
+                TZANET vous oriente vers ServiceLab pour une solution de location :
+                équipement, produits et maintenance inclus.
+            </p>
+            <div class="media-frame media-frame--inline">
+                <img src="{{ asset('images/chef-kitchen.png') }}" alt="Cuisine professionnelle accompagnée par ServiceLab" width="800" height="600" loading="lazy">
+            </div>
+            <ul class="check-list">
+                <li>Code TZANET : premier mois de location offert</li>
+                <li>Forfait location à partir de 180&nbsp;$ / mois</li>
+                <li>Produits d’entretien inclus dans le forfait</li>
+                <li>Maintenance et dépannage assurés</li>
+                <li>Aucun engagement d’achat</li>
+            </ul>
+        </div>
+        <div data-reveal="scale" data-reveal-delay="120">
+            {% include 'public/_lead_form_card.html.twig' with {
+                form: form,
+                source: source,
+                cta_label: "Profiter de l'offre TZANET",
+                source_label: 'Source détectée : TZANET'
+            } %}
+        </div>
+    </div>
+</section>
+
+<section class="section section--muted" data-controller="reveal">
+    <div class="section__inner">
+        <div class="gallery-grid gallery-grid--3">
+            <figure class="gallery-card" data-reveal data-reveal-delay="40">
+                <img src="{{ asset('images/hero-kitchen.png') }}" alt="Cuisine commerciale" loading="lazy">
+                <figcaption><strong>Équipement installé</strong></figcaption>
+            </figure>
+            <figure class="gallery-card" data-reveal data-reveal-delay="100">
+                <img src="{{ asset('images/equipment-dishwasher.png') }}" alt="Machine professionnelle" loading="lazy">
+                <figcaption><strong>Machines pro</strong></figcaption>
+            </figure>
+            <figure class="gallery-card" data-reveal data-reveal-delay="160">
+                <img src="{{ asset('images/restaurant-interior.png') }}" alt="Restaurant partenaire" loading="lazy">
+                <figcaption><strong>Clients satisfaits</strong></figcaption>
+            </figure>
+        </div>
+    </div>
+</section>
+{% endblock %}

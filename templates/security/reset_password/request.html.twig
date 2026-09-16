@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe oublié — ServiceLab{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block body %}
+<div class="auth-layout" data-controller="reveal">
+    <aside class="auth-showcase" data-reveal>
+        <div class="auth-showcase__content">
+            <span class="site-logo__mark">SL</span>
+            <p class="eyebrow">Sécurité</p>
+            <h1>Réinitialisation du mot de passe</h1>
+            <p>Un lien unique vous sera envoyé. Il expire automatiquement pour protéger votre compte.</p>
+        </div>
+    </aside>
+    <div class="auth-shell">
+        <div class="auth-card" data-reveal data-reveal-delay="60">
+            <a href="{{ path('app_login') }}" class="auth-back">← Retour à la connexion</a>
+            <h2>Mot de passe oublié</h2>
+            <p class="auth-subtitle">Entrez votre e-mail professionnel.</p>
+
+            {% for flash_error in app.flashes('reset_password_error') %}
+                <div class="alert alert-error" role="alert">{{ flash_error }}</div>
+            {% endfor %}
+
+            {{ form_start(requestForm, { attr: { class: 'auth-form' } }) }}
+                <div class="form-field">
+                    {{ form_label(requestForm.email, 'Adresse e-mail') }}
+                    {{ form_widget(requestForm.email) }}
+                    {{ form_errors(requestForm.email) }}
+                </div>
+                <button class="btn btn-primary btn-block btn-lg">Envoyer le lien</button>
+            {{ form_end(requestForm) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

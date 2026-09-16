@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr" data-controller="page-transition">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}ServiceLab Partner Portal{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    {% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <div class="page-transition-overlay" data-page-transition-target="overlay" aria-hidden="true"></div>
+    {% block body %}{% endblock %}
+</body>
+</html>

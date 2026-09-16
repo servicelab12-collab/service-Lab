@@ -1,0 +1,125 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Offres — ServiceLab Partner Portal{% endblock %}
+{% block page_heading %}Offres{% endblock %}
+
+{% block content %}
+<section class="admin-page-head">
+    <div>
+        <p class="eyebrow">Administration</p>
+        <h1>Offres partenaires</h1>
+        <p>Conditions commerciales utilisées pour le calcul des commissions TZANET.</p>
+    </div>
+    <div class="admin-page-head__actions">
+        <a href="{{ path('admin_offers_new') }}" class="btn btn-primary btn-sm">Nouvelle offre</a>
+    </div>
+</section>
+
+{% if activeOffer %}
+<section class="offer-hero" data-reveal>
+    <div class="offer-hero__glow" aria-hidden="true"></div>
+    <div class="offer-hero__copy">
+        <span class="offer-hero__badge">
+            <span class="admin-topbar__dot" aria-hidden="true"></span>
+            Offre active
+        </span>
+        <h2>
+            {% if activeOffer.commissionEqualsMonthlyRent %}
+                Commission = 1 mois de loyer + {{ activeOffer.retourAnnuel }}% sur achats
+            {% else %}
+                Commission fixe ${{ activeOffer.commissionSignature }} + {{ activeOffer.retourAnnuel }}%
+            {% endif %}
+        </h2>
+        <p>
+            Client code TZANET : {% if activeOffer.premierMoisGratuit %}1er mois gratuit{% else %}1er mois payant{% endif %}.
+            Applicable depuis le {{ activeOffer.dateDebut|date('d/m/Y') }}{% if activeOffer.dateFin %} jusqu’au {{ activeOffer.dateFin|date('d/m/Y') }}{% else %} (sans date de fin){% endif %}.
+            Une seule offre active à la fois — créer ou activer une nouvelle offre désactive les précédentes.
+        </p>
+    </div>
+    <div class="offer-hero__stats">
+        <article>
+            <span>Retour sur achats</span>
+            <strong>{{ activeOffer.retourAnnuel }}%</strong>
+        </article>
+        <article>
+            <span>1er mois client</span>
+            <strong>{{ activeOffer.premierMoisGratuit ? 'Gratuit' : 'Payant' }}</strong>
+        </article>
+        <article>
+            <span>Commission</span>
+            <strong>{{ activeOffer.commissionEqualsMonthlyRent ? '= loyer' : '$' ~ activeOffer.commissionSignature }}</strong>
+        </article>
+    </div>
+</section>
+{% endif %}
+
+<section class="admin-panel offer-panel">
+    <div class="admin-panel__head">
+        <div>
+            <h2>Historique des offres</h2>
+            <p>{{ offers|length }} condition{{ offers|length > 1 ? 's' : '' }} commerciale{{ offers|length > 1 ? 's' : '' }}.</p>
+        </div>
+    </div>
+    <div class="admin-panel__body">
+        {% if offers is empty %}
+            <div class="admin-empty admin-empty--compact">
+                <div class="admin-empty__copy">
+                    <h3>Aucune offre</h3>
+                    <p>Créez la première offre partenaire pour activer le calcul des commissions TZANET.</p>
+                    <a href="{{ path('admin_offers_new') }}" class="btn btn-primary">Créer une offre</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="offer-list">
+                {% for offer in offers %}
+                    {% set isCurrent = activeOffer and activeOffer.id == offer.id %}
+                    <article class="offer-card {% if isCurrent %}is-active{% endif %}">
+                        <div class="offer-card__main">
+                            <div class="offer-card__status">
+                                <span class="badge {{ isCurrent ? 'badge--tzanet' : 'badge--status' }}">
+                                    {% if isCurrent %}
+                                        Appliquée aujourd’hui
+                                    {% elseif offer.active %}
+                                        Active (hors période)
+                                    {% else %}
+                                        Inactive
+                                    {% endif %}
+                                </span>
+                                <span class="offer-card__period">
+                                    {{ offer.dateDebut|date('d/m/Y') }}
+                                    →
+                                    {{ offer.dateFin ? offer.dateFin|date('d/m/Y') : '∞' }}
+                                </span>
+                            </div>
+                            <h3>
+                                {% if offer.commissionEqualsMonthlyRent %}
+                                    Commission = loyer mensuel
+                                {% else %}
+                                    Commission fixe ${{ offer.commissionSignature }}
+                                {% endif %}
+                            </h3>
+                            <ul class="offer-card__meta">
+                                <li>
+                                    <span>Retour annuel</span>
+                                    <strong>{{ offer.retourAnnuel }}%</strong>
+                                </li>
+                                <li>
+                                    <span>1er mois gratuit</span>
+                                    <strong>{{ offer.premierMoisGratuit ? 'Oui' : 'Non' }}</strong>
+                                </li>
+                                <li>
+                                    <span>Mode commission</span>
+                                    <strong>{{ offer.commissionEqualsMonthlyRent ? 'Variable' : 'Fixe' }}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="offer-card__actions">
+                            <a href="{{ path('admin_offers_edit', {id: offer.id}) }}" class="btn btn-secondary btn-sm">Modifier</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

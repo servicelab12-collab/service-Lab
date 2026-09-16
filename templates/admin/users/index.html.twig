@@ -1,0 +1,48 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Utilisateurs — ServiceLab Partner Portal{% endblock %}
+{% block page_heading %}Utilisateurs{% endblock %}
+
+{% block content %}
+<section class="admin-page-head">
+    <div>
+        <p class="eyebrow">Administration</p>
+        <h1>Utilisateurs</h1>
+        <p>Comptes admin et commerciaux du portail.</p>
+    </div>
+    <a href="{{ path('admin_users_new') }}" class="btn btn-primary btn-sm">Nouvel utilisateur</a>
+</section>
+
+<section class="admin-panel">
+    <div class="admin-panel__body">
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>E-mail</th>
+                        <th>Rôle</th>
+                        <th>Créé</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td><strong>{{ user.nom }}</strong></td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <span class="badge badge--status">
+                                    {{ user.admin ? 'Administrateur' : 'Commercial' }}
+                                </span>
+                            </td>
+                            <td>{{ user.createdAt|date('d/m/Y') }}</td>
+                            <td><a href="{{ path('admin_users_edit', {id: user.id}) }}" class="btn btn-secondary btn-sm">Modifier</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

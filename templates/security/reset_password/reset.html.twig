@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau mot de passe — ServiceLab{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block body %}
+<div class="auth-shell" style="min-height:100vh">
+    <div class="auth-card">
+        <h2>Nouveau mot de passe</h2>
+        <p class="auth-subtitle">Choisissez un mot de passe sécurisé.</p>
+        {{ form_start(resetForm, { attr: { class: 'auth-form' } }) }}
+            <div class="form-field">{{ form_row(resetForm.plainPassword.first) }}</div>
+            <div class="form-field">{{ form_row(resetForm.plainPassword.second) }}</div>
+            <button class="btn btn-primary btn-block btn-lg">Enregistrer</button>
+        {{ form_end(resetForm) }}
+    </div>
+</div>
+{% endblock %}

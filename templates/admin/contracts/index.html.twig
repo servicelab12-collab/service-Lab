@@ -1,0 +1,100 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Contrats — ServiceLab Partner Portal{% endblock %}
+{% block page_heading %}Contrats{% endblock %}
+
+{% block content %}
+<section class="admin-page-head">
+    <div>
+        <p class="eyebrow">Signature</p>
+        <h1>Contrats</h1>
+        <p>{{ contracts|length }} contrat{{ contracts|length > 1 ? 's' : '' }} enregistré{{ contracts|length > 1 ? 's' : '' }}.</p>
+    </div>
+    <div class="admin-page-head__actions">
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin_contracts_new') }}" class="btn btn-primary btn-sm">Nouveau contrat</a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="admin-panel">
+    <div class="admin-panel__body">
+        {% if contracts is empty %}
+            <div class="admin-empty admin-empty--compact">
+                <div class="admin-empty__copy">
+                    <h3>Aucun contrat</h3>
+                    <p>Créez un contrat depuis un lead qualifié pour générer la commission TZANET si applicable.</p>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('admin_contracts_new') }}" class="btn btn-primary">Créer un contrat</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Source</th>
+                            <th>Loyer</th>
+                            <th>Durée</th>
+                            <th>Signature</th>
+                            <th>Offre</th>
+                            <th>Statut</th>
+                            <th>Commission</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contract in contracts %}
+                            <tr>
+                                <td>
+                                    <strong>{{ contract.lead.nom }}</strong>
+                                    <div class="text-caption">{{ contract.lead.reference }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge badge--tzanet">
+                                        {{ contract.lead.source.label }}
+                                    </span>
+                                </td>
+                                <td>${{ contract.loyerMensuel }}</td>
+                                <td>{{ contract.dureeMois }} mois</td>
+                                <td>{{ contract.dateSignature|date('d/m/Y') }}</td>
+                                <td>
+                                    {% if contract.offer %}
+                                        <strong>#{{ contract.offer.id }}</strong>
+                                        <div class="text-caption">
+                                            {{ contract.offer.premierMoisGratuit ? '1er mois gratuit' : '1er mois payant' }}
+                                            · {{ contract.offer.retourAnnuel }}%
+                                        </div>
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+                                <td><span class="badge badge--status">{{ contract.statut.label }}</span></td>
+                                <td>
+                                    {% if contract.commission %}
+                                        ${{ contract.commission.montantSignature }}
+                                        <div class="text-caption">{{ contract.commission.statut.label }}</div>
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+                                <td class="admin-table-actions">
+                                    <a href="{{ path('admin_contracts_show', {id: contract.id}) }}" class="btn btn-secondary btn-sm">Voir</a>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <form method="post" action="{{ path('admin_contracts_delete', {id: contract.id}) }}" onsubmit="return confirm('Supprimer le contrat de {{ contract.lead.nom|e('js') }} ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('contract_delete_' ~ contract.id) }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

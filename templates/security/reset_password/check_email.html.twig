@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}E-mail envoyé — ServiceLab{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block body %}
+<div class="auth-shell" style="min-height:100vh">
+    <div class="auth-card" data-controller="reveal">
+        <div data-reveal>
+            <h2>Vérifiez votre boîte mail</h2>
+            <p class="auth-subtitle">
+                Si un compte existe pour cette adresse, un e-mail vient d’être envoyé.
+                Le lien expire dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+            </p>
+            <a href="{{ path('app_login') }}" class="btn btn-secondary btn-block">Retour à la connexion</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block body_class %}admin-app{% endblock %}
+
+{% block body %}
+<div class="admin-shell" data-controller="admin-shell reveal">
+    <button type="button" class="admin-backdrop" data-admin-shell-target="backdrop" data-action="admin-shell#close" aria-label="Fermer le menu"></button>
+    <aside class="admin-sidebar" data-admin-shell-target="sidebar" id="sidebar">
+        <div class="admin-sidebar__glow" aria-hidden="true"></div>
+        <div class="admin-sidebar__brand">
+            <a href="{{ path('admin_dashboard') }}" class="admin-sidebar__brand-link">
+                <img
+                    class="admin-sidebar__brand-img"
+                    src="{{ asset('images/brands/servicelab-logo-white.png') }}"
+                    alt="ServiceLab"
+                    width="150"
+                    height="49"
+                >
+                <small>Partner Portal</small>
+            </a>
+            <div class="admin-sidebar__partners" aria-label="Partenaires">
+                <img src="{{ asset('images/brands/tzanet-logo.png') }}" alt="TZANET" width="88" height="24">
+            </div>
+        </div>
+
+        <nav class="admin-sidebar__nav" aria-label="Navigation admin">
+            <p class="admin-sidebar__label">Principal</p>
+            <a href="{{ path('admin_dashboard') }}" class="admin-nav {% if app.request.attributes.get('_route') == 'admin_dashboard' %}is-active{% endif %}" style="--i:1">
+                <span class="admin-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg>
+                </span>
+                <span class="admin-nav__text">Dashboard</span>
+            </a>
+            <a href="{{ path('admin_leads') }}" class="admin-nav {% if app.request.attributes.get('_route') starts with 'admin_leads' %}is-active{% endif %}" style="--i:2">
+                <span class="admin-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </span>
+                <span class="admin-nav__text">Leads</span>
+            </a>
+            <a href="{{ path('admin_contracts') }}" class="admin-nav {% if app.request.attributes.get('_route') starts with 'admin_contracts' %}is-active{% endif %}" style="--i:3">
+                <span class="admin-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                </span>
+                <span class="admin-nav__text">Contrats</span>
+            </a>
+            <a href="{{ path('admin_commissions') }}" class="admin-nav {% if app.request.attributes.get('_route') starts with 'admin_commissions' %}is-active{% endif %}" style="--i:4">
+                <span class="admin-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </span>
+                <span class="admin-nav__text">Commissions</span>
+            </a>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <p class="admin-sidebar__label">Administration</p>
+                <a href="{{ path('admin_offers') }}" class="admin-nav {% if app.request.attributes.get('_route') starts with 'admin_offers' %}is-active{% endif %}" style="--i:5">
+                    <span class="admin-nav__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/></svg>
+                    </span>
+                    <span class="admin-nav__text">Offres</span>
+                </a>
+                <a href="{{ path('admin_analytics') }}" class="admin-nav {% if app.request.attributes.get('_route') starts with 'admin_analytics' %}is-active{% endif %}" style="--i:6">
+                    <span class="admin-nav__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>
+                    </span>
+                    <span class="admin-nav__text">Analytics</span>
+                </a>
+                <a href="{{ path('admin_users') }}" class="admin-nav {% if app.request.attributes.get('_route') starts with 'admin_users' %}is-active{% endif %}" style="--i:7">
+                    <span class="admin-nav__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                    </span>
+                    <span class="admin-nav__text">Utilisateurs</span>
+                </a>
+            {% endif %}
+
+            <p class="admin-sidebar__label">Compte</p>
+            <a href="{{ path('app_logout') }}" class="admin-nav admin-nav--logout" style="--i:8">
+                <span class="admin-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+                </span>
+                <span class="admin-nav__text">Déconnexion</span>
+            </a>
+        </nav>
+
+        <div class="admin-sidebar__bottom">
+            <div class="admin-profile">
+                <div class="admin-profile__top">
+                    <div class="admin-profile__avatar" aria-hidden="true">
+                        <span>{{ app.user.nom|slice(0,1)|upper }}</span>
+                        <i class="admin-profile__pulse"></i>
+                    </div>
+                    <div class="admin-profile__meta">
+                        <strong>{{ app.user.nom }}</strong>
+                        <span class="admin-profile__role {{ is_granted('ROLE_ADMIN') ? 'is-admin' : 'is-commercial' }}">
+                            {{ is_granted('ROLE_ADMIN') ? 'Administrateur' : 'Commercial' }}
+                        </span>
+                    </div>
+                </div>
+                <p class="admin-profile__email">{{ app.user.email }}</p>
+                <div class="admin-profile__actions">
+                    <a href="{{ path('app_home') }}" class="admin-profile__btn">Site client</a>
+                    <a href="{{ path('app_logout') }}" class="admin-profile__btn admin-profile__btn--ghost">Quitter</a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="admin-main">
+        <header class="admin-topbar">
+            <button type="button" class="admin-topbar__menu" aria-label="Menu" data-action="admin-shell#toggle">
+                <span></span><span></span><span></span>
+            </button>
+
+            <div class="admin-topbar__brand">
+                {% set route = app.request.attributes.get('_route') %}
+                <div class="admin-topbar__heading">
+                    <span class="admin-topbar__icon" aria-hidden="true">
+                        {% block page_icon %}
+                            {% if route starts with 'admin_leads' %}
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            {% elseif route starts with 'admin_contracts' %}
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                            {% elseif route starts with 'admin_commissions' %}
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            {% elseif route starts with 'admin_offers' %}
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/></svg>
+                            {% elseif route starts with 'admin_analytics' %}
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16"/><path d="M8 15v-4M12 15V8M16 15v-6"/></svg>
+                            {% elseif route starts with 'admin_users' %}
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                            {% else %}
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg>
+                            {% endif %}
+                        {% endblock %}
+                    </span>
+                    <div class="admin-topbar__brand-text">
+                        <p class="admin-topbar__eyebrow">Espace partenaire</p>
+                        <div class="admin-topbar__title-row">
+                            <h1 class="admin-topbar__title">{% block page_heading %}Dashboard{% endblock %}</h1>
+                            <span class="admin-topbar__chip">
+                                <span class="admin-topbar__dot" aria-hidden="true"></span>
+                                En ligne
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <label class="admin-topbar__search" aria-label="Recherche rapide">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <input type="search" placeholder="Rechercher lead, contrat…" disabled title="Bientôt disponible">
+            </label>
+
+            <div class="admin-topbar__actions">
+                <div class="admin-topbar__profile">
+                    <span class="admin-topbar__avatar">{{ app.user.nom|slice(0,1)|upper }}</span>
+                    <div class="admin-topbar__profile-meta">
+                        <strong>{{ app.user.nom }}</strong>
+                        <small>{{ is_granted('ROLE_ADMIN') ? 'Administrateur' : 'Commercial' }}</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-content">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label == 'error' ? 'error' : 'success' }}" role="status">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}

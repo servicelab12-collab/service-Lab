@@ -1,0 +1,75 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_heading %}{{ title }}{% endblock %}
+
+{% block content %}
+<section class="admin-page-head">
+    <div>
+        <p class="eyebrow">Offres partenaires</p>
+        <h1>{{ title }}</h1>
+        <p>
+            {% if is_new|default(false) %}
+                Nouvelle offre : si vous l’activez, elle remplace l’offre en cours (1er mois gratuit, commission, retour %).
+            {% else %}
+                Modifier cette offre. Si vous la réactivez, elle devient la seule offre appliquée.
+            {% endif %}
+        </p>
+    </div>
+    <div class="admin-page-head__actions">
+        <a href="{{ path('admin_offers') }}" class="btn btn-secondary btn-sm">Retour à la liste</a>
+    </div>
+</section>
+
+<section class="admin-panel offer-form-panel">
+    <div class="admin-panel__body">
+        {{ form_start(form, {attr: {class: 'offer-form', 'data-controller': 'offer-commission'}}) }}
+            <div class="offer-form__grid">
+                <fieldset class="offer-form__section">
+                    <legend>
+                        <span class="offer-form__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </span>
+                        Commission &amp; retour
+                    </legend>
+                    <p class="offer-form__hint" data-offer-commission-target="hint">
+                        Choisissez un seul mode : loyer mensuel OU commission fixe.
+                    </p>
+                    <div class="offer-form__checks">
+                        {{ form_row(form.commissionEqualsMonthlyRent) }}
+                        {{ form_row(form.premierMoisGratuit) }}
+                    </div>
+                    <div class="offer-form__row">
+                        <div data-offer-commission-target="fixedWrap">
+                            {{ form_row(form.commissionSignature) }}
+                        </div>
+                        {{ form_row(form.retourAnnuel) }}
+                    </div>
+                </fieldset>
+
+                <fieldset class="offer-form__section">
+                    <legend>
+                        <span class="offer-form__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                        </span>
+                        Période de validité
+                    </legend>
+                    <p class="offer-form__hint">Laissez la date de fin vide pour une offre ouverte.</p>
+                    <div class="offer-form__row">
+                        {{ form_row(form.dateDebut) }}
+                        {{ form_row(form.dateFin) }}
+                    </div>
+                    <div class="offer-form__checks offer-form__checks--solo">
+                        {{ form_row(form.active) }}
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="offer-form__actions">
+                <button class="btn btn-primary" type="submit">Enregistrer l’offre</button>
+                <a href="{{ path('admin_offers') }}" class="btn btn-secondary">Annuler</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</section>
+{% endblock %}
