@@ -115,5 +115,6 @@ try {
 done
 
 php bin/console doctrine:migrations:migrate --no-interaction --env=prod
+php bin/console app:ensure-demo-users --env=prod --no-interaction
 
 exec apache2-foreground
